@@ -94,3 +94,24 @@ server{
 service nginx restart
 ```
 
+
+## P.S.
+- При использовании веб-сокетов в конфиг nginx необходимо добавить:
+```myproject
+
+location /api/websocket_login {
+    proxy_set_header   X-Forwarded-For $remote_addr;
+	proxy_set_header   Host $http_host;
+    proxy_set_header Upgrade websocket;
+    proxy_set_header Connection Upgrade;
+    proxy_pass         "http://127.0.0.1:9999/api/websocket_login";
+}
+location /api/websocket {
+    proxy_set_header   X-Forwarded-For $remote_addr;
+    proxy_set_header   Host $http_host;
+    proxy_set_header Upgrade websocket;
+    proxy_set_header Connection Upgrade;
+    proxy_pass         "http://127.0.0.1:9999/api/websocket";
+}
+
+```
