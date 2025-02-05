@@ -80,6 +80,20 @@ server{
 
 	location /media {
 		alias /path/to/media; (- путь к папке с медиа)
+
+		location ~ ^/media/profiles/(?<id_profile>\d+)/(?<image>.+\.(png|jpg|jpeg|webp))$ {
+	        expires 30d;  # Кэшировать на 30 дней
+	        add_header Cache-Control "public, no-transform";
+	
+	        # Оптимизация для статических файлов
+	        sendfile on;
+	        tcp_nopush on;
+	        tcp_nodelay on;
+	
+	        # Включаем gzip для изображений (если поддерживается)
+	        gzip on;
+	        gzip_types image/jpeg image/png image/webp;
+	    }
 	}
 	
 	location / {
@@ -93,6 +107,11 @@ server{
 ```Bash
 service nginx restart
 ```
+
+
+## 4. Создание сервиса в Linux
+
+
 
 
 ## P.S.
